@@ -1,0 +1,31 @@
+name: Deploy GameTrail
+
+on:
+  push:
+    branches:
+      - main  # Se ejecutará cuando haya cambios en main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código fuente
+        uses: actions/checkout@v3
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.0'  # Usa la versión más reciente estable
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Construir versión web
+        run: flutter build web
+
+      - name: Desplegar en GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/web
